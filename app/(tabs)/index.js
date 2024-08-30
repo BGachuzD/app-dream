@@ -46,53 +46,45 @@ export default function Page() {
         <CustomSwitch onToggle={handleSwitchChange} />
       </View>
 
-      <LinearGradient
-        colors={['#415a77', '#ffffff']}
-        style={styles.cardContainer}
-        start={{ x: 0.5, y: 0.5 }} // Centra el gradiente
-        end={{ x: 1, y: 1 }} // Desplaza hacia las esquinas
-        locations={[0, 1]} // Distribuye los colores
-      >
-        <View style={styles.containerClock}>
-          {isOn ?
-            <Text style={styles.infoText}>
-              {date.toTimeString().slice(0, 5)}
-            </Text>
-            :
-            <View>
-              {Platform.OS === 'ios' ? (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={'time'}
-                  is24Hour={true}
-                  onChange={onChange}
-                  display='spinner'
-                  textColor='#E0E1DD'
-                  minuteInterval={5}
-                />
-              ) : (
-                <AndroidDateTimePicker
-                  value={date}
-                  onChange={onChange}
-                  mode="time"
-                  minuteInterval={5}
-                />
-              )}
-            </View>
-          }
-        </View>
-        <View style={styles.containerButton}>
-          <Pressable
-            style={styles.button}
-            onPress={() => setShow(true)}
-          >
-            <Text>
-              {isOn ? '¿A qué hora debo despertarme?' : '¿A qué hora debería acostarme?'}
-            </Text>
-          </Pressable>
-        </View>
-      </LinearGradient>
+      <View style={styles.containerClock}>
+        {isOn ?
+          <Text style={styles.infoText}>
+            {date.toTimeString().slice(0, 5)}
+          </Text>
+          :
+          <View>
+            {Platform.OS === 'ios' ? (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={'time'}
+                is24Hour={true}
+                onChange={onChange}
+                display='spinner'
+                textColor='#E0E1DD'
+                minuteInterval={5}
+              />
+            ) : (
+              <AndroidDateTimePicker
+                value={date}
+                onChange={onChange}
+                mode="time"
+                minuteInterval={5}
+              />
+            )}
+          </View>
+        }
+      </View>
+      <View style={styles.containerButton}>
+        <Pressable
+          style={styles.button}
+          onPress={() => setShow(true)}
+        >
+          <Text>
+            {isOn ? '¿A qué hora debo despertarme?' : '¿A qué hora debería acostarme?'}
+          </Text>
+        </Pressable>
+      </View>
 
 
     </View>
