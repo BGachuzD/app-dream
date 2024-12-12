@@ -1,5 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Entypo from '@expo/vector-icons/Entypo';
 import Octicons from '@expo/vector-icons/Octicons';
 import { Tabs } from 'expo-router';
 
@@ -15,11 +16,21 @@ export default function TabLayout() {
           animate: true,
           borderCurve: 10,
           width: '100%',
+          marginBottom: 5,
         },
       }}
     >
       <Tabs.Screen
         name="index"
+        options={{
+          title: 'Actividades Diarias',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Entypo name="list" size={24} color={color} />,
+          tabBarIconStyle: { marginTop: 5 },
+        }}
+      />
+      <Tabs.Screen
+        name="about"
         options={{
           title: 'Calculadora de Sueño',
           headerShown: false,
@@ -28,11 +39,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="about"
+        name="list"
         options={{
-          title: '¿Qué son los ciclos de sueño?',
+          title: 'Pase lista',
           headerShown: false,
-          tabBarIcon: ({ color }) => <Octicons name="info" size={24} color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome6 name="list" size={24} color={color} />,
+          tabBarIconStyle: { marginTop: 5 },
         }}
       />
     </Tabs>

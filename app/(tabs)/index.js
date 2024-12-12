@@ -1,156 +1,219 @@
-import { Link } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, SafeAreaView, Pressable, Platform } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import Animated, { Easing, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
-import CustomSwitch from '../../components/CustomSwitch';
-import Constants from 'expo-constants';
-import { useState } from 'react';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomDateTimePicker from '../../components/CustomDateTimePicker';
-import AndroidDateTimePicker from '../../components/AndroidDateTimePicker';
+import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import { Pressable, Text, View, FlatList, Platform } from "react-native";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { dayjs } from "../../libs/dayjs";
+import { Formik } from "formik";
+import RNPickerSelect from 'react-native-picker-select';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { actividadesCategories } from "../../utils/actividades";
+import CustomModal from "../../components/Modal";
+import { FAB } from 'react-native-paper';
+import { styles } from "../../styles/main";
+import { Modal as PaperModal, Portal, PaperProvider, TextInput as RNTextInput } from 'react-native-paper';
+import { TouchableOpacity } from "react-native";
 
-import { LinearGradient } from 'expo-linear-gradient';
+
+const initialValues = {
+  obs: '',
+  id: null,
+  tittle: '',
+  description: '',
+  date: '',
+};
 
 export default function Page() {
-  const [isOn, setIsOn] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
+  const bottomSheetModalRef = useRef(null);
+  const [actividades, setActividades] = useState([]);
+  const [item, setItem] = useState(null);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDate(currentDate);
+  useEffect(() => {
+    getAsyncStorage();
+  }, []);
+
+  const dateNowFormatted = useMemo(() => {
+    const dateNow = new Date();
+    return dayjs(dateNow).format("dddd D");
+  }, []);
+
+  const handleOpenBottomSheet = () => {
+    if (bottomSheetModalRef.current) {
+      console.log("Opening BottomSheet");  // Verificación
+      bottomSheetModalRef.current.present();
+    } else {
+      console.log("bottomSheetModalRef is null");
+    }
   };
 
-  const handleSwitchChange = (newValue) => {
-    setIsOn(newValue);
+  const saveAsyncStorage = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('actividades', jsonValue);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
+  const handleAddActivity = (values) => {
+    const newActividad = values;
+    setActividades([...actividades, newActividad]);
+    saveAsyncStorage([...actividades, newActividad]);
+  };
 
-      <Text style={styles.tittleText}>Calculadora de Sueño</Text>
+  const getAsyncStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem('actividades');
+      //Filtrar por fecha actual
+      const actividadesFiltradas = JSON.parse(value).filter((actividad) => {
+        return dayjs(actividad.date).format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD');
+      });
+      if (value !== null) {
+        setActividades(actividadesFiltradas);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-      <View style={styles.switchContainer}>
-        {isOn ? (
-          <View style={styles.tabContent}>
-            <Text style={styles.infoText}>Si me duermo ahorita, ¿A qué hora debo despertar?</Text>
-          </View>
-        ) : (
-          <View style={styles.tabContent}>
-            <Text style={styles.infoText}>Me quiero despertar a esta hora, ¿A qué hora debo dormirme?</Text>
-          </View>
-        )}
-        <CustomSwitch onToggle={handleSwitchChange} />
-      </View>
-
-      <View style={styles.containerClock}>
-        {isOn ?
-          <Text style={styles.infoText}>
-            {date.toTimeString().slice(0, 5)}
-          </Text>
-          :
-          <View>
-            {Platform.OS === 'ios' ? (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={'time'}
-                is24Hour={true}
-                onChange={onChange}
-                display='spinner'
-                textColor='#E0E1DD'
-                minuteInterval={5}
-              />
-            ) : (
-              <AndroidDateTimePicker
-                value={date}
-                onChange={onChange}
-                mode="time"
-                minuteInterval={5}
-              />
-            )}
-          </View>
-        }
-      </View>
-      <View style={styles.containerButton}>
-        <Pressable
-          style={styles.button}
-          onPress={() => setShow(true)}
-        >
-          <Text>
-            {isOn ? '¿A qué hora debo despertarme?' : '¿A qué hora debería acostarme?'}
-          </Text>
-        </Pressable>
-      </View>
-
-
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer}>
+      <Pressable
+        onPress={() => {
+          setItem(item);
+          showModal();
+        }}
+      >
+        <Text style={styles.itemText}>{dayjs(item.date).format("LT")} - {item.title}</Text>
+      </Pressable>
     </View>
   );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    paddingTop: Constants.statusBarHeight + 20,
-    paddingHorizontal: 20
-  },
-  cardContainer: {
-    flexDirection: 'column',
-    marginVertical: 20,
-    borderRadius: 30,
-    padding: 20,
-    elevation: 5,
-  },
-  switchContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  tabContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  tittleText: {
-    color: '#ebd14f',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-  },
-  infoText: {
-    color: '#fff',
-    fontSize: 16,
-    marginVertical: 20,
-    height: 50,
-    width: '100%',
-    overflow: 'hidden',
-    textAlign: 'center',
-    lineHeight: 20,
-    flexWrap: 'wrap',
-  },
-  containerClock: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 50,
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-    marginBottom: 50,
-  },
-  containerButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ebd14f',
-    borderRadius: 50,
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-  },
-  button: {
-    backgroundColor: '#ebd14f',
-    padding: 10,
-    borderRadius: 5
-  }
-});
+  const placeholder = {
+    label: 'Selecciona una actividad',
+    value: null,
+    color: '#9EA0A4',
+  };
+
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <PaperProvider>
+          <Portal>
+            <View style={styles.container}>
+              <StatusBar style="light" />
+              <CustomModal
+                item={item}
+                visible={visible}
+                hideModal={hideModal}
+                showModal={showModal}
+              />
+              <Text style={{
+                color: '#fff',
+                fontSize: 50,
+                fontWeight: 'bold',
+                marginVertical: 20,
+              }}>
+                {dateNowFormatted}
+              </Text>
+              <Text style={styles.tittleText}>Cosas que hice en el día:</Text>
+              <FlatList
+                data={actividades}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+              />
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#ebd14f',
+                  padding: 10,
+                  borderRadius: 5,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  width: 'auto',
+                  alignSelf: 'center',
+                }}
+                onPress={() => {
+                  handleOpenBottomSheet();
+                }}
+              >
+                <Text style={{ color: "#000" }}>
+                  Agregar actividad
+                </Text>
+              </TouchableOpacity>
+              <BottomSheetModal
+                ref={bottomSheetModalRef}
+                index={0}  // Cambiar el índice inicial a 0
+                snapPoints={["80%", "50%"]}  // Puntos de ajuste
+              >
+                <BottomSheetView
+                  style={{
+                    backgroundColor: "#fff",
+                    padding: 16,
+                    height: '100%',
+                    display: 'flex',
+                  }}
+                >
+                  <Text style={styles.title}>Actividad</Text>
+                  <Formik
+                    initialValues={initialValues}
+                    onSubmit={values => {
+                      const actividadCategoria = actividadesCategories.find((actividad) => actividad.id === parseInt(values.id));
+                      const data = {
+                        id: actividades.length + 1,
+                        title: actividadCategoria.title,
+                        description: actividadCategoria.description,
+                        obs: values.obs,
+                        date: dayjs().format(),
+                      }
+                      handleAddActivity(data);
+                      bottomSheetModalRef.current.dismiss();  // Cierra el BottomSheet
+                    }}
+                  >
+                    {({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
+                      <View>
+                        <RNPickerSelect
+                          placeholder={placeholder}
+                          onValueChange={(value) => setFieldValue('id', value)}
+                          items={actividadesCategories?.map((actividad) => ({
+                            label: actividad.title,
+                            value: actividad.id,
+                          }))}
+                          style={Platform.OS === 'ios' ? styles.inputIOS : styles.inputAndroid}
+                          textInputProps={{
+                            style: {
+                              height: 40,
+                              marginVertical: 12,
+                              borderWidth: 1,
+                              padding: 10,
+                            }
+                          }}
+                        />
+                        <RNTextInput
+                          style={styles.input}
+                          onChangeText={handleChange('obs')}
+                          onBlur={handleBlur('obs')}
+                          value={values.obs}
+                          placeholder="Observaciones"
+                          inputMode="text"
+                          blurOnSubmit={false}
+                        />
+                        <Pressable style={styles.button} onPress={handleSubmit}>
+                          <Text>Guardar</Text>
+                        </Pressable>
+                      </View>
+                    )}
+                  </Formik>
+                </BottomSheetView>
+              </BottomSheetModal>
+            </View>
+          </Portal>
+        </PaperProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
+  );
+}
 

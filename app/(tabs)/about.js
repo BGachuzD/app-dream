@@ -1,95 +1,199 @@
-import { Link } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from 'react';
-import Constants from 'expo-constants';
+import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import { Pressable, Text, View, FlatList, Platform } from "react-native";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { BottomSheetModal, BottomSheetView, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { dayjs } from "../../libs/dayjs";
+import { Formik } from "formik";
+import RNPickerSelect from 'react-native-picker-select';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { actividadesCategories } from "../../utils/actividades";
+import CustomModal from "../../components/Modal";
+import { FAB, List } from 'react-native-paper';
+import { styles } from "../../styles/main";
+import { Modal as PaperModal, Portal, PaperProvider } from 'react-native-paper';
 
+
+const initialValues = {
+  obs: '',
+  id: null,
+  tittle: '',
+  description: '',
+  date: '',
+};
 
 export default function Page() {
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
+  const bottomSheetModalRef = useRef(null);
+  const [actividades, setActividades] = useState([]);
+  const [item, setItem] = useState(null);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDate(currentDate);
+  useEffect(() => {
+    getAsyncStorage();
+  }, []);
+
+  const dateNowFormatted = useMemo(() => {
+    const dateNow = new Date();
+    return dayjs(dateNow).format("dddd D");
+  }, []);
+
+  const handleOpenBottomSheet = () => {
+    if (bottomSheetModalRef.current) {
+      bottomSheetModalRef.current.present();
+    }
   };
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <Text style={styles.tittleText}>Calculadora de Sueño</Text>
+  const saveAsyncStorage = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('actividades', jsonValue);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-      <Text style={styles.infoText}>Selecciona la hora a la que te quieres despertar</Text>
+  const handleAddActivity = (values) => {
+    const newActividad = values;
+    setActividades([...actividades, newActividad]);
+    saveAsyncStorage([...actividades, newActividad]);
+  };
 
-      <View style={styles.containerClock}>
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={'time'}
-          is24Hour={true}
-          onChange={onChange}
-          display='spinner'
-          textColor='#E0E1DD'
-          minuteInterval={5}
-        />
-      </View>
-      <View style={styles.containerButton}>
-        <Pressable
-          style={styles.button}
-          onPress={() => setShow(true)}
-        >
-          <Text>Calcular</Text>
-        </Pressable>
-      </View>
+  const getAsyncStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem('actividades');
+      //Agrupar actividades por dia
+
+      const actividadesData = value ? JSON.parse(value) : [];
+
+      console.log('Actividades', actividadesData);
+
+      const actividadesGrouped = actividadesData.reduce((acc, actividad) => {
+        const date = dayjs(actividad.date).format('YYYY-MM-DD');
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(actividad);
+        return acc;
+      }, {});
+
+      console.log(actividadesGrouped);
+
+      if (value !== null) {
+        setActividades(actividadesGrouped);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const [expanded, setExpanded] = useState(true);
+
+  const handlePress = () => setExpanded(!expanded);
+
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer}>
+      <List.Section title="Actividades">
+        <List.Accordion
+          title="Uncontrolled Accordion"
+          left={props => <List.Icon {...props} icon="calendar" />}>
+          <List.Item title={dayjs(item.date).format("DD/MM/YYYY")} />
+        </List.Accordion>
+      </List.Section>
     </View>
   );
+
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <View style={styles.container}>
+          <Text style={{
+            color: '#fff',
+            fontSize: 30,
+            fontWeight: 'bold',
+            marginVertical: 20,
+          }}>
+            Histórico
+          </Text>
+          <Text style={styles.tittleText}>Actividades de la semana</Text>
+          <FlatList
+            data={actividades}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+          />
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={["40%", "80%"]}
+          >
+            <BottomSheetView
+              style={{
+                backgroundColor: "#fff",
+                padding: 16,
+                height: '100%',
+                display: 'flex',
+              }}
+            >
+              <Text
+                style={styles.title}>
+                Actividad
+              </Text>
+              <Formik
+                initialValues={initialValues}
+                onSubmit={values => {
+                  const actividadCategoria = actividadesCategories.find((actividad) => actividad.id === parseInt(values.id));
+                  const data = {
+                    id: actividades.length + 1,
+                    title: actividadCategoria.title,
+                    description: actividadCategoria.description,
+                    obs: values.obs,
+                    date: dayjs().format(),
+                  }
+                  handleAddActivity(data);
+                  bottomSheetModalRef.current.dismiss();
+                }}
+              >
+                {({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
+                  <View>
+                    <RNPickerSelect
+                      placeholder={placeholder}
+                      onValueChange={(value) => setFieldValue('id', value)}
+                      items={actividadesCategories?.map((actividad) => ({
+                        label: actividad.title,
+                        value: actividad.id,
+                      }))}
+
+                      style={Platform.OS === 'ios' ? styles.inputIOS : styles.inputAndroid}
+                      textInputProps={{
+                        style: {
+                          height: 40,
+                          marginVertical: 12,
+                          borderWidth: 1,
+                          padding: 10,
+                        }
+                      }}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={handleChange('obs')}
+                      onBlur={handleBlur('obs')}
+                      value={values.email}
+                      placeholder="Observaciones"
+                      inputMode="text"
+                      blurOnSubmit={false}
+                    />
+                    <Pressable
+                      style={styles.button}
+                      onPress={handleSubmit}>
+                      <Text>Guardar</Text>
+                    </Pressable>
+                  </View>
+                )}
+              </Formik>
+            </BottomSheetView>
+          </BottomSheetModal>
+        </View>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView> // Cierre de GestureHandlerRootView
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#415A77',
-    paddingTop: Constants.statusBarHeight + 20,
-    paddingHorizontal: 20
-  },
-  tittleText: {
-    color: '#ebd14f',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-  },
-  infoText: {
-    color: '#fff',
-    fontSize: 16,
-    marginVertical: 20,
-    height: 50,
-    width: '100%',
-  },
-  containerClock: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#2C3E50',
-    borderRadius: 50,
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-    marginBottom: 50,
-  },
-  containerButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ebd14f',
-    borderRadius: 50,
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-    marginBottom: 50,
-  },
-  button: {
-    backgroundColor: '#ebd14f',
-    padding: 10,
-    borderRadius: 5
-  }
-});
-
-
 
