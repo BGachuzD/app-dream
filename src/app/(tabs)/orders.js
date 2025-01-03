@@ -5,12 +5,14 @@ import * as Animatable from 'react-native-animatable';
 import Animated, { Easing, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import CustomSwitch from '../../components/CustomSwitch';
 import Constants from 'expo-constants';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomDateTimePicker from '../../components/CustomDateTimePicker';
 import AndroidDateTimePicker from '../../components/AndroidDateTimePicker';
-
 import { LinearGradient } from 'expo-linear-gradient';
+import { getNotes } from '../../services/api/products';
+import { ContainerStyles, TitleViewStyles } from '../../styles/globals';
+import TitleView from '../../components/Text/TitleView';
 
 export default function Page() {
   const [isOn, setIsOn] = useState(false);
@@ -31,7 +33,7 @@ export default function Page() {
     <View style={styles.container}>
       <StatusBar style="auto" />
 
-      <Text style={styles.tittleText}>Calculadora de Sueño</Text>
+      <TitleView title="Pasteleria Maru" />
 
       <View style={styles.switchContainer}>
         {isOn ? (
@@ -92,13 +94,7 @@ export default function Page() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    paddingTop: Constants.statusBarHeight + 20,
-    paddingHorizontal: 20
-  },
+  container: ContainerStyles,
   cardContainer: {
     flexDirection: 'column',
     marginVertical: 20,
@@ -116,12 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  tittleText: {
-    color: '#ebd14f',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-  },
+  tittleText: TitleViewStyles,
   infoText: {
     color: '#fff',
     fontSize: 16,
