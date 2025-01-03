@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { Colors } from '../../styles/globals';
 import ScrollViewCustom from '../ScrollView/ScrollViewCustom';
 import { products } from '../../utils/productsTest';
+import CardProduct from '../Cards/CardProduct';
 
 const MyGrid = () => {
   const [rows, setRows] = useState([]);
@@ -37,12 +38,7 @@ const MyGrid = () => {
             {row.map((product, colIndex) => (
               <View style={styles.column} key={colIndex}>
                 {product ? (
-                  <View style={styles.item}>
-                    <Image source={{ uri: product.image }} style={styles.img} />
-                    <Text>{product.name}</Text>
-                    <Text>{product.price}</Text>
-                    <Text>{product.stock}</Text>
-                  </View>
+                  <CardProduct product={product} />
                 ) : null}
               </View>
             ))}
@@ -59,7 +55,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
   },
   row: {
     flexDirection: 'row',
@@ -69,8 +64,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 180,
     margin: 5,
-    height: 150,
     borderRadius: 10,
   },
   item: {
