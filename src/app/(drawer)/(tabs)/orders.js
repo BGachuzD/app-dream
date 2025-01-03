@@ -1,18 +1,11 @@
-import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, SafeAreaView, Pressable, Platform } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import Animated, { Easing, useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
-import CustomSwitch from '../../components/CustomSwitch';
-import Constants from 'expo-constants';
-import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
+import CustomSwitch from '../../../components/CustomSwitch';
+import { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomDateTimePicker from '../../components/CustomDateTimePicker';
-import AndroidDateTimePicker from '../../components/AndroidDateTimePicker';
-import { LinearGradient } from 'expo-linear-gradient';
-import { getNotes } from '../../services/api/products';
-import { ContainerStyles, TitleViewStyles } from '../../styles/globals';
-import TitleView from '../../components/Text/TitleView';
+import AndroidDateTimePicker from '../../../components/AndroidDateTimePicker';
+import { ContainerStyles, TitleViewStyles } from '../../../styles/globals';
+import TitleView from '../../../components/Text/TitleView';
 
 export default function Page() {
   const [isOn, setIsOn] = useState(false);

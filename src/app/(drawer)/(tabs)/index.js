@@ -1,13 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { getNotes } from '../../services/api/products';
-import { ContainerStyles, TitleViewStyles } from '../../styles/globals';
+import { getNotes } from '../../../services/api/products';
+import { ContainerStyles } from '../../../styles/globals';
 import { useEffect, useState } from 'react';
-import ScrollViewCustom from '../../components/ScrollView/ScrollViewCustom';
-import TitleView from '../../components/Text/TitleView';
-import TextView from '../../components/Text/TextView';
-import CardProduct from '../../components/Cards/CardProduct';
-import MyGrid from '../../components/Grid/MyGrid';
+import ScrollViewCustom from '../../../components/ScrollView/ScrollViewCustom';
+import TitleView from '../../../components/Text/TitleView';
+import TextView from '../../../components/Text/TextView';
+import MyGrid from '../../../components/Grid/MyGrid';
 
 export default function Page() {
   const [products, setProducts] = useState([]);

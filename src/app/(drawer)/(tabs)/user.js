@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, SafeAreaView, Pressable, Platform } from 'react-native';
-import { getNotes } from '../../services/api/products';
-import { ContainerStyles, TitleViewStyles } from '../../styles/globals';
-import TitleView from '../../components/Text/TitleView';
+import { getNotes } from '../../../services/api/products';
+import { ContainerStyles, TitleViewStyles } from '../../../styles/globals';
+import TitleView from '../../../components/Text/TitleView';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
