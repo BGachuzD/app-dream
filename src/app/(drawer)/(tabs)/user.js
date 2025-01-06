@@ -20,9 +20,7 @@ export default function Page() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <TitleView title="Pasteleria Maru" />
-
-
+      <TitleView title="Perfil" />
     </View>
   );
 }

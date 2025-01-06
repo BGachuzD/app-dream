@@ -7,8 +7,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.pink,
-        tabBarInactiveTintColor: Colors.white,
+        tabBarActiveTintColor: Colors.primary,
+        tabBarInactiveTintColor: Colors.pink,
         tabBarStyle: {
           backgroundColor: Colors.white,
           borderTopLeftRadius: 10,
@@ -21,7 +21,9 @@ export default function TabLayout() {
         options={{
           title: 'Mostrador',
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <MaterialIcons name="home" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name="home" size={32} color={color} />,
+          headerShadowVisible: true,
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
@@ -29,7 +31,9 @@ export default function TabLayout() {
         options={{
           title: 'Pedidos',
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <MaterialIcons name="fact-check" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name="fact-check" size={32} color={color} />,
+          headerShadowVisible: true,
+          tabBarShowLabel: false,
         }}
       />
       <Tabs.Screen
@@ -37,7 +41,9 @@ export default function TabLayout() {
         options={{
           title: 'Usuario',
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <FontAwesome5 name="user-alt" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color={color} />,
+          headerShadowVisible: true,
+          tabBarShowLabel: false,
         }}
       />
     </Tabs>

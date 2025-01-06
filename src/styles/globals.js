@@ -23,7 +23,8 @@ export const ContainerStyles = {
   flex: 1,
   flexDirection: 'column',
   backgroundColor: Colors.white,
-  paddingTop: Constants.statusBarHeight + 20,
+  //paddingTop: Constants.statusBarHeight + 10,
+  paddingTop: 20,
   paddingHorizontal: 20,
 };
 
@@ -31,7 +32,7 @@ export const TitleViewStyles = {
   color: Colors.primary,
   fontSize: 26,
   fontWeight: 'bold',
-  marginVertical: 20,
+  marginBottom: 10,
 };
 
 export const TextStyles = {
