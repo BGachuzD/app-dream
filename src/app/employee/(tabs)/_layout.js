@@ -36,16 +36,6 @@ export default function TabLayout() {
           tabBarShowLabel: false,
         }}
       />
-      <Tabs.Screen
-        name="user"
-        options={{
-          title: 'Usuario',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color={color} />,
-          headerShadowVisible: true,
-          tabBarShowLabel: false,
-        }}
-      />
     </Tabs>
   );
 }

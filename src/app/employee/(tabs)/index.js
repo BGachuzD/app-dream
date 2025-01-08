@@ -7,7 +7,7 @@ import ScrollViewCustom from '../../../components/ScrollView/ScrollViewCustom';
 import TitleView from '../../../components/Text/TitleView';
 import TextView from '../../../components/Text/TextView';
 import MyGrid from '../../../components/Grid/MyGrid';
-import { IconButton, MD3Colors, Tooltip } from 'react-native-paper';
+import { IconButton, Tooltip } from 'react-native-paper';
 import { goTo } from '../../../hooks/useNavigation';
 import { useNavigation } from '@react-navigation/native';
 
@@ -40,7 +40,7 @@ export default function Page() {
             style={{ backgroundColor: Colors.pink }}
             size={40}
             onPress={() => {
-              goTo(navigation, 'settings');
+              goTo(navigation, 'newProduct');
             }}
           />
         </Tooltip>
