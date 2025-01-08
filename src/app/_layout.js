@@ -38,6 +38,9 @@ export default function RootLayout() {
           <Stack.Screen name="admin" options={{ headerShown: false }} />
           <Stack.Screen name="owner" options={{ headerShown: false }} />
           <Stack.Screen name="employee" options={{ headerShown: false }} />
+          {/* Auth */}
+          <Stack.Screen name="auth" options={{ headerShown: false }} />
+          {/* Admin */}
         </Stack>
         <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
       </UserProvider>

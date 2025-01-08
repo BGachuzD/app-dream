@@ -15,5 +15,10 @@ export default function RedirectPage() {
     );
   }
 
+  if (!user.token) {
+    // Si el usuario tiene un token, redirige a la página correspondiente a su rol
+    return <Redirect href={`/auth`} />;
+  }
+
   return <Redirect href={`/${user.role}`} />;
 }
