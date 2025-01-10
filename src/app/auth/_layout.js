@@ -4,11 +4,13 @@ export default function AuthLayout() {
   return (
     <Drawer
       initialRouteName="welcome"
-      drawerContentOptions={{
-        activeTintColor: '#e91e63',
-        itemStyle: { marginVertical: 30 },
+      screenOptions={{
+        headerShown: false,
+        drawerType: 'slide',
+        drawerStyle: {
+          width: 240,
+        },
       }}
-      screenOptions={{ headerShown: false }}
     >
       <Drawer.Screen name="welcome"
         options={{

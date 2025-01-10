@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Colors } from '../../styles/globals';
 import ScrollViewCustom from '../ScrollView/ScrollViewCustom';
 import { products } from '../../utils/productsTest';

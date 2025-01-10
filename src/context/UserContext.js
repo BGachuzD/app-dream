@@ -15,8 +15,8 @@ export const UserProvider = ({ children }) => {
           id: '123',
           name: 'Brayan Gachuz',
           email: 'bgd010801@gmail.com',
-          role: 'admin',
-          //token: 'abc123',
+          role: 'employee',
+          token: 'abc123',
         }), 1000)
       );
       setUser(userData);
