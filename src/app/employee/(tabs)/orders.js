@@ -7,14 +7,19 @@ import ScrollViewCustom from '../../../components/ScrollView/ScrollViewCustom';
 import TitleView from '../../../components/Text/TitleView';
 import TextView from '../../../components/Text/TextView';
 import MyGrid from '../../../components/Grid/MyGrid';
+import CalendarComponent from '../../../components/Calendar/CalendarComponent';
+import { Switch } from 'react-native-paper';
 
 export default function Page() {
   const [products, setProducts] = useState([]);
+  const [listView, setListView] = useState(false);
 
   const getProducts = async () => {
     const data = await getNotes();
     setProducts(data);
   }
+
+  const onToggleSwitch = () => setListView(!listView);
 
   useEffect(() => {
     getProducts();
@@ -23,10 +28,22 @@ export default function Page() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <TitleView title="Pedidos" />
+      <View style={styles.row}>
+        <TitleView title="Pedidos" />
+        <View style={styles.row}>
+          <Text>Calendario</Text>
+          <Switch
+            value={listView}
+            onValueChange={onToggleSwitch}
+          />
+          <Text>Lista</Text>
+        </View>
+      </View>
       <ScrollViewCustom>
-        <TextView text="Productos en mostrador" />
-        <MyGrid products={products} />
+        <TextView text="Proximos pedidos" />
+        <View style={{ height: 300 }}>
+          <CalendarComponent />
+        </View>
       </ScrollViewCustom>
     </View>
   );
@@ -36,7 +53,8 @@ const styles = StyleSheet.create({
   container: ContainerStyles,
   row: {
     flexDirection: 'row',
-    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   column: {
     flex: 1,

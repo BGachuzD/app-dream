@@ -16,14 +16,18 @@
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/stack": "^6.3.18",
     "expo": "^52.0.23",
+    "expo-calendar": "~14.0.6",
     "expo-constants": "~16.0.2",
+    "expo-linear-gradient": "~14.0.1",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.23",
+    "expo-sqlite": "~15.0.6",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",
     "react-native-animatable": "^1.4.0",
+    "react-native-calendars": "^1.1307.0",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
     "react-native-linear-gradient": "^2.8.3",
@@ -35,8 +39,7 @@
     "react-native-svg": "15.2.0",
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-web": "~0.19.10",
-    "expo-linear-gradient": "~14.0.1"
+    "react-native-web": "~0.19.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
