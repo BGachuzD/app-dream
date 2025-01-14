@@ -9,6 +9,7 @@ import TextView from '../../../components/Text/TextView';
 import MyGrid from '../../../components/Grid/MyGrid';
 import CalendarComponent from '../../../components/Calendar/CalendarComponent';
 import { Switch } from 'react-native-paper';
+import CustomSwitch from '../../../components/Swtich/CustomSwitch';
 
 export default function Page() {
   const [products, setProducts] = useState([]);
@@ -30,14 +31,7 @@ export default function Page() {
       <StatusBar style="auto" />
       <View style={styles.row}>
         <TitleView title="Pedidos" />
-        <View style={styles.row}>
-          <Text>Calendario</Text>
-          <Switch
-            value={listView}
-            onValueChange={onToggleSwitch}
-          />
-          <Text>Lista</Text>
-        </View>
+        <CustomSwitch />
       </View>
       <ScrollViewCustom>
         <TextView text="Proximos pedidos" />

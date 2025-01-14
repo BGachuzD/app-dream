@@ -3,27 +3,34 @@ import { TextInput } from "react-native-paper";
 import CustomTextInput from "../Input/CustomTextInput";
 import { Colors } from "../../styles/globals";
 import GradientButton from "../Buttons/GradientButton";
+import ScrollViewCustom from "../ScrollView/ScrollViewCustom";
 
 export const RegisterView = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.textTitle}>Registro</Text>
-      <Text style={styles.text}>Ingresa tus datos para continuar</Text>
-      <CustomTextInput
-        label="Nombre"
-        placeholder="Nombre"
-      />
-      <CustomTextInput
-        label="Apellido"
-        placeholder="Apellido"
-      />
-
-      <GradientButton
-        text="Registrarme"
-        onPress={() => { }}
-        colors={['#4c669f', '#3b59']}
-        style={{ marginTop: 20 }}
-      />
+      <ScrollViewCustom>
+        <Text style={styles.text}>Ingresa tus datos para continuar</Text>
+        <CustomTextInput
+          label="Nombre"
+          placeholder="Nombre"
+        />
+        <CustomTextInput
+          label="Correo Electrónico"
+          placeholder="example@example.com"
+        />
+        <CustomTextInput
+          label="Contraseña"
+          placeholder="********"
+        />
+        <GradientButton
+          text="Registrarme"
+          onPress={() => { }}
+          colors={['#d4d8cf', '#89b5bf']}
+          //colors={['#4c669f', '#3b59']}
+          style={{ marginTop: 20 }}
+        />
+      </ScrollViewCustom>
     </View>
   );
 };

@@ -20,6 +20,7 @@ export const UserProvider = ({ children }) => {
         }), 1000)
       );
       setUser(userData);
+      //setUser(null);
     };
 
     fetchUserData();

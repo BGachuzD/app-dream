@@ -2,14 +2,15 @@ import { Stack } from 'expo-router';
 import { UserProvider } from '../context/UserContext';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { Colors } from '../styles/globals';
 
-export default function RootLayout() {
-
+const ForwardRefToast = () => {
   const toastConfig = {
     success: (props) => (
       <BaseToast
         {...props}
-        style={{ borderLeftColor: 'green' }}
+        style={{ borderLeftColor: Colors.primary }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
         text1Style={{
           fontSize: 18,
           fontWeight: 'bold',
@@ -27,23 +28,24 @@ export default function RootLayout() {
       />
     ),
   };
+  return <Toast config={toastConfig} />;
+};
 
+export default function RootLayout() {
   return (
-
-    <PaperProvider>
-      <UserProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          {/* Roles */}
-          <Stack.Screen name="admin" options={{ headerShown: false }} />
-          <Stack.Screen name="owner" options={{ headerShown: false }} />
-          <Stack.Screen name="employee" options={{ headerShown: false }} />
-          {/* Auth */}
-          <Stack.Screen name="auth" options={{ headerShown: false }} />
-          {/* Admin */}
-        </Stack>
-        <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
-      </UserProvider>
-    </PaperProvider>
+    <>
+      <ForwardRefToast />
+      <PaperProvider>
+        <UserProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="admin" options={{ headerShown: false }} />
+            <Stack.Screen name="owner" options={{ headerShown: false }} />
+            <Stack.Screen name="employee" options={{ headerShown: false }} />
+            <Stack.Screen name="auth" options={{ headerShown: false }} />
+          </Stack>
+        </UserProvider>
+      </PaperProvider>
+    </>
   );
 }

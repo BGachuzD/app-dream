@@ -5,6 +5,7 @@
     "newArchEnabled": true,
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "app-dream",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {

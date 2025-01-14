@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import GradientButton from "../Buttons/GradientButton";
+import { Colors } from "../../styles/globals";
+import CustomTextInput from "../Input/CustomTextInput";
 
 
 export const LoginView = () => {
@@ -8,23 +10,19 @@ export const LoginView = () => {
     <View style={styles.container}>
       <Text style={styles.textTitle}>Iniciar Sesión</Text>
       <Text style={styles.text}>Ingresa tus datos para continuar</Text>
-      <TextInput
-        label="Correo electrónico"
-        mode="outlined"
-        style={styles.input}
-        keyboardType="email-address"
+      <CustomTextInput
+        label="Correo Electrónico"
+        placeholder="example@example.com"
       />
-      <TextInput
+      <CustomTextInput
         label="Contraseña"
-        mode="outlined"
-        style={styles.input}
-        secureTextEntry
+        placeholder="********"
       />
-
       <GradientButton
         text="Entrar"
         onPress={() => { }}
-        colors={['#4c669f', '#3b59']}
+        colors={['#d4d8cf', '#89b5bf']}
+        //colors={['#4c669f', '#3b59']}
         style={{ marginTop: 20 }}
       />
     </View>
@@ -52,5 +50,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    color: Colors.primary,
   },
 });

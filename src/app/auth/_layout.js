@@ -19,7 +19,6 @@ export default function AuthLayout() {
         }}
       />
       <Drawer.Screen name="login" options={{ title: 'Iniciar Sesión' }} />
-      <Drawer.Screen name="signup" options={{ title: 'Registrarse' }} />
     </Drawer>
   );
 }

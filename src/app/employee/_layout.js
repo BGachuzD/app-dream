@@ -13,14 +13,24 @@ import CustomDropdown from '../../components/Select/CustomDropdown';
 const showToast = () => {
   console.log('Toast');
   Toast.show({
-    type: 'success', // También puedes usar 'error' o 'info'
-    text1: 'Operación exitosa',
-    text2: 'El usuario ha sido creado correctamente 🎉',
+    type: 'info', // También puedes usar 'error' o 'info'
+    text1: 'Cerrando sesión',
+    text2: 'Has cerrado sesión correctamente',
   });
 }
 
 function CustomDrawerContent({ navigation, user, logout }) {
   const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const handleButtonPress = () => {
+    showToast();
+
+    setTimeout(() => {
+      logout();
+    }, 3000);
+
+    navigation.navigate('auth');
+  };
 
   useEffect(() => {
     setSelectedLanguage('java');
@@ -34,8 +44,8 @@ function CustomDrawerContent({ navigation, user, logout }) {
             source={{ uri: 'https://scontent.fmex16-1.fna.fbcdn.net/v/t39.30808-1/469554906_2560273970849009_309401191351698823_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeGsQc7_TUjmb2N36XVlf9vpXqiDlI1gYxVeqIOUjWBjFZ3qw7P8fhH3NiylrovsnYB5p4WpXu0fslTiw5PYVrY8&_nc_ohc=UY-lftzU2FIQ7kNvgHmJIfJ&_nc_zt=24&_nc_ht=scontent.fmex16-1.fna&_nc_gid=Azf_bTCp4-7kwwlcxYPQRzm&oh=00_AYDKrmfhENKP8BdbjuXMAke3GsOcr-YvLonDletjnOiLfQ&oe=678224DD' }}
             style={styles.avatar}
           />
-          <Text style={styles.username}>{user.name}</Text>
-          <Text style={styles.userRole}>{user.role ? roleString(user.role) : ''}</Text>
+          <Text style={styles.username}>{user?.name}</Text>
+          <Text style={styles.userRole}>{user?.role ? roleString(user?.role) : ''}</Text>
         </View>
 
         <TouchableOpacity
@@ -63,11 +73,7 @@ function CustomDrawerContent({ navigation, user, logout }) {
       <Button
         icon="logout"
         mode="outlined"
-        onPress={() => {
-          //logout();
-          console.log('Cerrar Sesión');
-          showToast();
-        }}
+        onPress={handleButtonPress}
         style={styles.button}
       >
         Cerrar Sesión
@@ -80,30 +86,33 @@ export default function EmployeeLayout() {
   const { user, logout } = useContext(UserContext);
 
   return (
-    <Drawer
-      screenOptions={{
-        headerShown: true,
-        drawerActiveBackgroundColor: Colors.primary,
-        drawerActiveTintColor: Colors.white,
-        drawerInactiveTintColor: Colors.primary,
-        headerStyle: { backgroundColor: Colors.primary },
-        headerTintColor: Colors.white,
-      }}
-      drawerContent={(props) => <CustomDrawerContent {...props} user={user} logout={logout} />}
-    >
-      <Toast ref={(ref) => Toast.setRef(ref)} />
-      <Drawer.Screen
-        name="(tabs)"
-        options={{
-          drawerLabel: 'Pastelería',
-          title: 'Pastelería',
+    <>
+      <Toast />
+      <Drawer
+        screenOptions={{
+          headerShown: true,
+          drawerActiveBackgroundColor: Colors.primary,
+          drawerActiveTintColor: Colors.white,
+          drawerInactiveTintColor: Colors.primary,
+          headerStyle: { backgroundColor: Colors.primary },
+          headerTintColor: Colors.white,
         }}
-      />
-      <Drawer.Screen name="newProduct" options={{ title: 'Agregar Producto' }} />
-      <Drawer.Screen name="profile" options={{ title: 'Perfil' }} />
-    </Drawer>
+        drawerContent={(props) => <CustomDrawerContent {...props} user={user} logout={logout} />}
+      >
+        <Drawer.Screen
+          name="(tabs)"
+          options={{
+            drawerLabel: 'Pastelería',
+            title: 'Pastelería',
+          }}
+        />
+        <Drawer.Screen name="newProduct" options={{ title: 'Agregar Producto' }} />
+        <Drawer.Screen name="profile" options={{ title: 'Perfil' }} />
+      </Drawer>
+    </>
   );
 }
+
 
 const styles = StyleSheet.create({
   drawerContainer: {
