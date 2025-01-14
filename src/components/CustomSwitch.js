@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import Feather from '@expo/vector-icons/Feather';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const CustomSwitch = ({ onToggle }) => {
@@ -10,10 +9,12 @@ const CustomSwitch = ({ onToggle }) => {
   const translateX = useSharedValue(0);
 
   const toggleSwitch = () => {
-    setIsOn(!isOn);
-    translateX.value = withTiming(isOn ? 0 : 70, { duration: 300 });
-    onToggle(!isOn);
+    const newIsOn = !isOn; // Usamos un nuevo valor para evitar depender del estado anterior.
+    setIsOn(newIsOn);
+    translateX.value = withTiming(newIsOn ? 70 : 0, { duration: 300 });
+    onToggle(newIsOn);
   };
+
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

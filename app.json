@@ -25,15 +25,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-calendar",
-        {
-          "calendarPermission": "The app needs to access your calendar."
-        }
-      ],
-      "expo-sqlite"
-    ]
+    "plugins": ["expo-router"]
   }
 }
