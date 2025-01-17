@@ -23,7 +23,7 @@ export const ContainerStyles = {
   flex: 1,
   flexDirection: 'column',
   backgroundColor: Colors.white,
-  paddingTop: Constants.statusBarHeight + 10,
+  paddingTop: 10,
   //paddingTop: 20,
   paddingHorizontal: 20,
 };
