@@ -11,7 +11,6 @@ import { Picker } from '@react-native-picker/picker';
 import CustomDropdown from '../../components/Select/CustomDropdown';
 
 const showToast = () => {
-  console.log('Toast');
   Toast.show({
     type: 'info', // También puedes usar 'error' o 'info'
     text1: 'Cerrando sesión',
@@ -22,7 +21,7 @@ const showToast = () => {
 function CustomDrawerContent({ navigation, user, logout }) {
   const [selectedLanguage, setSelectedLanguage] = useState();
 
-  const handleButtonPress = () => {
+  const handleLogout = () => {
     showToast();
 
     setTimeout(() => {
@@ -30,6 +29,8 @@ function CustomDrawerContent({ navigation, user, logout }) {
     }, 3000);
 
     navigation.navigate('auth');
+    //Cerrar el drawer
+    navigation.closeDrawer();
   };
 
   useEffect(() => {
@@ -68,12 +69,10 @@ function CustomDrawerContent({ navigation, user, logout }) {
         </TouchableOpacity>
         <CustomDropdown />
       </View>
-
-
       <Button
         icon="logout"
         mode="outlined"
-        onPress={handleButtonPress}
+        onPress={handleLogout}
         style={styles.button}
       >
         Cerrar Sesión
