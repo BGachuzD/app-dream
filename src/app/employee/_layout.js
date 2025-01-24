@@ -7,7 +7,6 @@ import { UserContext } from '../../context/UserContext';
 import Constants from 'expo-constants';
 import { Button } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
-import { Picker } from '@react-native-picker/picker';
 import CustomDropdown from '../../components/Select/CustomDropdown';
 
 const showToast = () => {
