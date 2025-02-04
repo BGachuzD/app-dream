@@ -3,9 +3,12 @@ import { TextInput } from "react-native-paper";
 import GradientButton from "../Buttons/GradientButton";
 import { Colors } from "../../styles/globals";
 import CustomTextInput from "../Input/CustomTextInput";
+import { useNavigation } from "expo-router";
 
 
 export const LoginView = () => {
+  const navigate = useNavigation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.textTitle}>Iniciar Sesión</Text>
@@ -20,7 +23,9 @@ export const LoginView = () => {
       />
       <GradientButton
         text="Entrar"
-        onPress={() => { }}
+        onPress={() => {
+          navigate.navigate('employee');
+        }}
         colors={['#d4d8cf', '#89b5bf']}
         //colors={['#4c669f', '#3b59']}
         style={{ marginTop: 20 }}
