@@ -51,50 +51,53 @@ export default function Dashboard() {
           style={{ width: 100, height: 100, resizeMode: 'contain' }}
         />
       </View>
-      <View style={styles.containerButtons}>
-        {/* Botón de "Iniciar Sesión" */}
-        <Animated.View
-          style={[
-            styles.buttonContainerLeft,
-            { borderBottomWidth: loginBorderWidth, borderBottomColor: Colors.primary },
-          ]}
-        >
-          <Button
-            mode="contained"
-            onPress={() => setValue('login')}
-            style={styles.button}
+      <View style={styles.card}>
+        <View style={styles.containerButtons}>
+          {/* Botón de "Iniciar Sesión" */}
+          <Animated.View
+            style={[
+              styles.buttonContainerLeft,
+              { borderBottomWidth: loginBorderWidth, borderBottomColor: Colors.primary },
+            ]}
           >
-            <Text
-              style={value === 'login' ? styles.textActive : styles.textButton}
+            <Button
+              mode="contained"
+              onPress={() => setValue('login')}
+              style={styles.button}
             >
-              Iniciar Sesión
-            </Text>
-          </Button>
-        </Animated.View>
-        {/* Botón de "Registrarse" */}
-        <Animated.View
-          style={[
-            styles.buttonContainerRight,
-            { borderBottomWidth: registerBorderWidth, borderBottomColor: Colors.primary },
-          ]}
-        >
-          <Button
-            mode="contained"
-            onPress={() => setValue('register')}
-            style={styles.button}
+              <Text
+                style={value === 'login' ? styles.textActive : styles.textButton}
+              >
+                Iniciar Sesión
+              </Text>
+            </Button>
+          </Animated.View>
+          {/* Botón de "Registrarse" */}
+          <Animated.View
+            style={[
+              styles.buttonContainerRight,
+              { borderBottomWidth: registerBorderWidth, borderBottomColor: Colors.primary },
+            ]}
           >
-            <Text
-              style={value === 'register' ? styles.textActive : styles.textButton}
+            <Button
+              mode="contained"
+              onPress={() => setValue('register')}
+              style={styles.button}
             >
-              Registrarse
-            </Text>
-          </Button>
-        </Animated.View>
+              <Text
+                style={value === 'register' ? styles.textActive : styles.textButton}
+              >
+                Registrarse
+              </Text>
+            </Button>
+          </Animated.View>
+        </View>
+        <View style={styles.containerForm}>
+          {
+            value === 'login' ? <LoginView /> : <RegisterView />
+          }
+        </View>
       </View>
-
-      {
-        value === 'login' ? <LoginView /> : <RegisterView />
-      }
     </View>
   );
 }
@@ -123,11 +126,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  card: {
+    flex: 1,
+    padding: 20,
+    marginTop: '40%',
+    alignItems: 'center',
+  },
   containerButtons: {
+    alignContent: 'center',
+    width: Dimensions.get('window').width - 40,
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: '40%'
+  },
+  containerForm: {
+    width: '100%',
+    height: 450,
   },
   buttonContainerRight: {
     width: '50%',
